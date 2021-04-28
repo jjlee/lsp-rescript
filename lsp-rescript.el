@@ -31,13 +31,13 @@
 
 Should be something like '(\"node\" \"/path/to/rescript-vscode/server/out/server.js\" \"--stdio\")
 "
-  :group 'rescript
+  :group 'lsp-rescript
   :risky t
   :type '(repeat string))
 
 (defcustom lsp-rescript-prompt-for-build t
   "nil suppresses the prompt to start a build."
-  :group 'rescript
+  :group 'lsp-rescript
   :risky t
   :type 'boolean)
 
