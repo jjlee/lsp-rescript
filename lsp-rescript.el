@@ -42,19 +42,20 @@
 (defcustom lsp-rescript-server-command '()
   "Full command to run the ReScript language server.
 
-Should be something like '(\"node\" \"/path/to/rescript-vscode/server/out/server.js\" \"--stdio\")
-"
+Should be something like '(\"node\" \"/path/to/rescript-vscode/server/out/server.js\" \"--stdio\")"
   :group 'lsp-rescript
   :risky t
   :type '(repeat string))
 
 (defcustom lsp-rescript-prompt-for-build t
-  "nil suppresses the prompt to start a build."
+  "If nil, suppress the prompt to start a build."
   :group 'lsp-rescript
   :risky t
   :type 'boolean)
 
 (defun lsp-rescript--hash-table-symbol-value-items (table)
+  "Return an alist suitable for sending as an LSP response.
+Argument TABLE hash table."
   (let (results)
     (maphash
      (lambda (key value)
@@ -81,6 +82,9 @@ Should be something like '(\"node\" \"/path/to/rescript-vscode/server/out/server
       (lsp-log message))))
 
 (defun lsp-rescript--handle-show-message-request (_workspace params)
+  "Handle a show message request.
+Argument WORKSPACE `lsp-mode' workspace.
+Argument PARAMS genuinely no idea what this is, checkdoc."
   (if lsp-rescript-prompt-for-build
       (lsp-rescript--window-log-message-request params)))
 
