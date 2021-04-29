@@ -63,6 +63,10 @@ Argument TABLE hash table."
      table)
     results))
 
+(defun lsp-rescript--propertize (str type)
+  "Propertize STR as per TYPE."
+  (propertize str 'face (alist-get type lsp--message-type-face)))
+
 (lsp-defun lsp-rescript--window-log-message-request ((&ShowMessageRequestParams :message :type :actions?))
   "Display a message request to the user and send the user's selection back to the server."
   ;; rescript-vscode arranges via an LSP request to give you an interactive
@@ -72,7 +76,7 @@ Argument TABLE hash table."
   ;; server wants to see projectRootPath when it processes the response from the
   ;; client.  This sends back all of the parameters instead of only `title' as
   ;; vanilla lsp-mode.el does.
-  (let* ((message (lsp--propertize message type))
+  (let* ((message (lsp-rescript--propertize message type))
           (choices (--map (gethash "title" it) actions?)))
     (if choices
         (let* ((selected (completing-read (concat message " ") choices nil t))
