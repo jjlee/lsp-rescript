@@ -88,14 +88,16 @@ Argument PARAMS genuinely no idea what this is, checkdoc."
   (if lsp-rescript-prompt-for-build
       (lsp-rescript--window-log-message-request params)))
 
-(lsp-register-client
-  (make-lsp-client :new-connection (lsp-stdio-connection lsp-rescript-server-command)
-                  :major-modes '(rescript-mode)
-                  :notification-handlers (ht ("client/registerCapability" #'ignore))
-                  :request-handlers (ht("window/showMessageRequest" #'lsp-rescript--handle-show-message-request))
-                  :priority 1
-                  :server-id 'rescript-ls))
 (add-to-list 'lsp-language-id-configuration '(rescript-mode . "rescript"))
+(lsp-register-client
+ (make-lsp-client
+  :new-connection (lsp-stdio-connection (lambda () lsp-rescript-server-command))
+  :major-modes '(rescript-mode)
+  :notification-handlers (ht ("client/registerCapability" #'ignore))
+  :request-handlers (ht("window/showMessageRequest" #'lsp-rescript--handle-show-message-request))
+  :priority 1
+  :language-id "rescript"
+  :server-id 'rescript-ls))
 
 (provide 'lsp-rescript)
 ;;; lsp-rescript.el ends here
