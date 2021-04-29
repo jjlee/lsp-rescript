@@ -97,7 +97,7 @@ Argument PARAMS genuinely no idea what this is, checkdoc."
   :request-handlers (ht("window/showMessageRequest" #'lsp-rescript--handle-show-message-request))
   :priority 1
   :language-id "rescript"
-  :server-id 'rescript-ls))
+  :server-id 'rescript-vscode))
 
 (provide 'lsp-rescript)
 ;;; lsp-rescript.el ends here
