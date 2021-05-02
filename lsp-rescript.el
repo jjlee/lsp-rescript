@@ -59,10 +59,10 @@ Should be something like '(\"node\" \"/path/to/rescript-vscode/server/out/server
 The values of the alist are length-one lists.
 
 For example, a TABLE with data:
-\(\"title\" \"Start Build\" \"projectRootPath\" \"/home/me/dev/project/myproject\")
+\(\"title\" \"Start Build\" \"projectRootPath\" \"/path/to/myproject\")
 
 is mapped to:
-(:title \"Start Build\" :projectRootPath \"/home/me/dev/project/myproject\")
+(:title \"Start Build\" :projectRootPath \"/path/to/myproject\")
 
 This is useful for constructing LSP responses from the lisp
 representation of LSP request JSON data."
