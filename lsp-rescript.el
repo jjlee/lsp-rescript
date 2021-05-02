@@ -68,7 +68,7 @@ Argument TABLE hash table."
   (propertize str 'face (alist-get type lsp--message-type-face)))
 
 (lsp-defun lsp-rescript--window-log-message-request ((&ShowMessageRequestParams :message :type :actions?))
-  "Display a message request to the user and send the user's selection back to the server."
+  "Display message request to the user and return user's selection as response."
   ;; rescript-vscode arranges via an LSP request to give you an interactive
   ;; prompt about whether you want to start a build.  This differs from the
   ;; upstream lsp-mode implementation in also sending back any additional
