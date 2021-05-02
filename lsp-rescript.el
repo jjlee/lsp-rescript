@@ -53,9 +53,19 @@ Should be something like '(\"node\" \"/path/to/rescript-vscode/server/out/server
   :risky t
   :type 'boolean)
 
-(defun lsp-rescript--hash-table-symbol-value-items (table)
-  "Return an alist suitable for sending as an LSP response.
-Argument TABLE hash table."
+(defun lsp-rescript--symbolize-json (table)
+  "Return an alist with the same keys and values as hash TABLE, but with symbol keys.
+
+The values of the alist are length-one lists.
+
+For example, a TABLE with data:
+\(\"title\" \"Start Build\" \"projectRootPath\" \"/home/me/dev/project/myproject\")
+
+is mapped to:
+(:title \"Start Build\" :projectRootPath \"/home/me/dev/project/myproject\")
+
+This is useful for constructing LSP responses from the lisp
+representation of LSP request JSON data."
   (let (results)
     (maphash
      (lambda (key value)
@@ -81,7 +91,7 @@ Argument TABLE hash table."
     (if choices
         (let* ((selected (completing-read (concat message " ") choices nil t))
                 (ht (car (--filter (equal (gethash "title" it) selected) (append actions? nil))))
-                (response (lsp-rescript--hash-table-symbol-value-items ht)))
+                (response (lsp-rescript--symbolize-json ht)))
           response)
       (lsp-log message))))
 
