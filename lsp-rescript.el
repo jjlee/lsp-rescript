@@ -85,12 +85,10 @@ Argument TABLE hash table."
           response)
       (lsp-log message))))
 
-(defun lsp-rescript--handle-show-message-request (_workspace params)
-  "Handle a show message request.
-Argument WORKSPACE `lsp-mode' workspace.
-Argument PARAMS genuinely no idea what this is, checkdoc."
+(defun lsp-rescript--handle-show-message-request (_workspace request)
+  "Handle a show message REQUEST in lsp WORKSPACE."
   (if lsp-rescript-prompt-for-build
-      (lsp-rescript--window-log-message-request params)))
+      (lsp-rescript--window-log-message-request request)))
 
 (add-to-list 'lsp-language-id-configuration '(rescript-mode . "rescript"))
 (lsp-register-client
