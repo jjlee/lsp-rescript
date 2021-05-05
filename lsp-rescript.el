@@ -35,14 +35,15 @@
 (require 'lsp-mode)
 
 (defgroup lsp-rescript nil
-  "lsp-mode client configuration for rescript-vscode LSP server for ReScript code."
+  "lsp-mode client configuration for rescript-vscode LSP server for ReScript."
   :link '(url-link "https://rescript-lang.org/")
   :group 'lsp-mode)
 
 (defcustom lsp-rescript-server-command '()
   "Full command to run the ReScript language server.
 
-Should be something like '(\"node\" \"/path/to/rescript-vscode/server/out/server.js\" \"--stdio\")"
+Should be something like:
+'(\"node\" \"/path/to/rescript-vscode/server/out/server.js\" \"--stdio\")"
   :group 'lsp-rescript
   :risky t
   :type '(repeat string))
@@ -54,7 +55,7 @@ Should be something like '(\"node\" \"/path/to/rescript-vscode/server/out/server
   :type 'boolean)
 
 (defun lsp-rescript--symbolize-json (table)
-  "Return an alist with the same keys and values as hash TABLE, but with symbol keys.
+  "Return an alist with the same keys and values as hash TABLE, but symbol keys.
 
 The values of the alist are length-one lists.
 
@@ -62,7 +63,7 @@ For example, a TABLE with data:
 \(\"title\" \"Start Build\" \"projectRootPath\" \"/path/to/myproject\")
 
 is mapped to:
-(:title \"Start Build\" :projectRootPath \"/path/to/myproject\")
+\(:title \"Start Build\" :projectRootPath \"/path/to/myproject\")
 
 This is useful for constructing LSP responses from the lisp
 representation of LSP request JSON data."
@@ -77,7 +78,8 @@ representation of LSP request JSON data."
   "Propertize STR as per TYPE."
   (propertize str 'face (alist-get type lsp--message-type-face)))
 
-(lsp-defun lsp-rescript--window-log-message-request ((&ShowMessageRequestParams :message :type :actions?))
+(lsp-defun lsp-rescript--window-log-message-request
+  ((&ShowMessageRequestParams :message :type :actions?))
   "Display message request to the user and return user's selection as response."
   ;; rescript-vscode arranges via an LSP request to give you an interactive
   ;; prompt about whether you want to start a build.  This differs from the
@@ -90,7 +92,8 @@ representation of LSP request JSON data."
           (choices (--map (gethash "title" it) actions?)))
     (if choices
         (let* ((selected (completing-read (concat message " ") choices nil t))
-                (ht (car (--filter (equal (gethash "title" it) selected) (append actions? nil))))
+               (ht (car (--filter (equal (gethash "title" it) selected)
+                                  (append actions? nil))))
                 (response (lsp-rescript--symbolize-json ht)))
           response)
       (lsp-log message))))
@@ -106,7 +109,8 @@ representation of LSP request JSON data."
   :new-connection (lsp-stdio-connection (lambda () lsp-rescript-server-command))
   :major-modes '(rescript-mode)
   :notification-handlers (ht ("client/registerCapability" #'ignore))
-  :request-handlers (ht("window/showMessageRequest" #'lsp-rescript--handle-show-message-request))
+  :request-handlers (ht("window/showMessageRequest"
+                        #'lsp-rescript--handle-show-message-request))
   :priority 1
   :language-id "rescript"
   :server-id 'rescript-vscode))
