@@ -59,7 +59,7 @@ Should be something like:
 
 The values of the alist are length-one lists.
 
-For example, a TABLE with data:
+For example, a hash table with data:
 \(\"title\" \"Start Build\" \"projectRootPath\" \"/path/to/myproject\")
 
 is mapped to:
