@@ -6,7 +6,7 @@
 ;; Author: John Lee
 ;; Url: https://github.com/jjlee/lsp-rescript
 ;; Keywords: languages
-;; Package-Requires: ((lsp-mode "7.0.1") (emacs "25.1"))
+;; Package-Requires: ((lsp-mode "7.0.1") (emacs "25.1") (rescript-mode "0.1"))
 
 ;; This file is NOT part of GNU Emacs.
 
