@@ -108,7 +108,8 @@ representation of LSP request JSON data."
  (make-lsp-client
   :new-connection (lsp-stdio-connection (lambda () lsp-rescript-server-command))
   :major-modes '(rescript-mode)
-  :notification-handlers (ht ("client/registerCapability" #'ignore))
+  :notification-handlers (ht ("client/registerCapability" #'ignore)
+                             ("rescript/compilationFinished" #'ignore))
   :request-handlers (ht("window/showMessageRequest"
                         #'lsp-rescript--handle-show-message-request))
   :priority 1
