@@ -106,16 +106,26 @@ representation of LSP request JSON data."
 
 ;; More Rescript utility functions
 (defun lsp-rescript--create-interface-from-buffer (buffer)
+  "Get an implementation file created from the current BUFFER's file."
   (interactive "bFile containing implementation: ")
   (with-current-buffer buffer
     (let ((uri (concat "file://localhost" (buffer-file-name) )))
       (if (lsp-request "textDocument/createInterface"
                        (list
-                        :uri uri)
-                       )
+                        :uri uri))
           (find-file (concat (buffer-file-name) "i" ))
-        ())
-      )))
+        (lsp-response)))))
+
+(defun lsp-rescript--open-compiled-file-from-buffer (buffer)
+  "Get the compiled file from the current source BUFFER's file."
+  (interactive "bFile containing source: ")
+  (with-current-buffer buffer
+    (-if-let* ((uri (concat "file://localhost" (buffer-file-name)))
+               (response (lsp-request "textDocument/openCompiled" (list :uri uri)))
+               (compiled-uri-with-protocol (gethash "uri" response))
+               (compiled-uri (replace-regexp-in-string "file://" "" compiled-uri-with-protocol)))
+        (find-file compiled-uri)
+      (lsp-warn "Error finding compiled JS code!"))))
 
 
 (add-to-list 'lsp-language-id-configuration '(rescript-mode . "rescript"))
