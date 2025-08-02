@@ -89,12 +89,12 @@ representation of LSP request JSON data."
   ;; client.  This sends back all of the parameters instead of only `title' as
   ;; vanilla lsp-mode.el does.
   (let* ((message (lsp-rescript--propertize message type))
-          (choices (--map (gethash "title" it) actions?)))
+         (choices (--map (gethash "title" it) actions?)))
     (if choices
         (let* ((selected (completing-read (concat message " ") choices nil t))
                (ht (car (--filter (equal (gethash "title" it) selected)
                                   (append actions? nil))))
-                (response (lsp-rescript--symbolize-json ht)))
+               (response (lsp-rescript--symbolize-json ht)))
           response)
       (lsp-log message))))
 
@@ -102,6 +102,21 @@ representation of LSP request JSON data."
   "Handle a show message REQUEST in lsp WORKSPACE."
   (if lsp-rescript-prompt-for-build
       (lsp-rescript--window-log-message-request request)))
+
+
+;; More Rescript utility functions
+(defun lsp-rescript--create-interface-from-buffer (buffer)
+  (interactive "bFile containing implementation: ")
+  (with-current-buffer buffer
+    (let ((uri (concat "file://localhost" (buffer-file-name) )))
+      (if (lsp-request "textDocument/createInterface"
+                       (list
+                        :uri uri)
+                       )
+          (find-file (concat (buffer-file-name) "i" ))
+        ())
+      )))
+
 
 (add-to-list 'lsp-language-id-configuration '(rescript-mode . "rescript"))
 (lsp-register-client
